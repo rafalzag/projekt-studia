@@ -43,8 +43,9 @@ for item in sorted_arr_with_info:
     # Pobierz tylko cyfry z numeru rzędu
     row_number = ''.join(char for char in seat_label if char.isdigit())
 
-    # Poprawiona obsługa różnych form zapisu wagi
-    weight = int(''.join(char for char in weight_str if char.isdigit()))
+    # Obsługa różnych form zapisu wagi
+    weight_str = weight_str.split()[0].strip()  # Get the first part before any space and remove leading/trailing spaces
+    weight = int(weight_str)
 
     if row_number not in row_weights:
         row_weights[row_number] = 0
@@ -59,7 +60,7 @@ print("Suma wag dla każdego rzędu:", row_weights)
 def roznica_wagi_przed_tyl(arrangement):
     wagi_przednich_rzedow = sum(row_weights[str(i)] for i in arrangement[:srodek_ciezkosci])
     wagi_tylnych_rzedow = sum(row_weights[str(i)] for i in arrangement[srodek_ciezkosci:])
-    return abs(wagi_przednich_rzedow - wagi_tylnych_rzedow)
+    return wagi_przednich_rzedow - wagi_tylnych_rzedow
 
 # Środek ciężkości na wysokości 13 rzędu
 srodek_ciezkosci = 13
@@ -81,6 +82,25 @@ elif wagi_przednich_rzedow < wagi_tylnych_rzedow:
 else:
     print("Środek ciężkości jest w odpowiednim miejscu.")
 
-# zakładając, że środek ciężkości jest przesunięty za bardzo do przodu (rzędy 1-12) lub do tyłu (rzędy 14-25) zaproponuj zamianę miejsc
+# zakładając, że środek ciężkości jest przesunięty za bardzo do przodu (rzędy 1-12) lub do tyłu (rzędy 14-25) zwróć komunikat: uwaga samolot niewyważony!
+
+# Przesunięcie maksymalne dozwolonego środka ciężkości (ustawiłem 100 kg tak randomowo)
+maks_przesuniecie = 100  # To warto dostosować do rzeczywistych parametrów samolotu
+
+# Informacja o przesunięciu środka ciężkości
+if roznica_wagi > maks_przesuniecie:
+    print(f"Uwaga! Samolot niewyważony. Przesunięcie środka ciężkości wynosi {roznica_wagi} kg, co przekracza maksymalne dozwolone przesunięcie.")
+elif wagi_przednich_rzedow > wagi_tylnych_rzedow:
+    print(f"Środek ciężkości jest przesunięty do tyłu, o {roznica_wagi} kg.")
+elif wagi_przednich_rzedow < wagi_tylnych_rzedow:
+    print(f"Środek ciężkości jest przesunięty do przodu, o {roznica_wagi} kg.")
+else:
+    print("Środek ciężkości jest w odpowiednim miejscu.")
+
+
+
+
+
+
 
 
